@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FaceBfdsfsdluff</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <img src="/images/img/Logo.png" alt="Logo de la empresa"/>
+            </header>
+            <nav>
+                    <%- include("divHeaderUser") %>             
+            </nav>
+            <div id="principal">
+                <divProfile>
+                    <h2 class="tittle-pages"><%= datosAmigo.nombCompl %></h2>
+                    <!-- BLOQUE LOGO Y DATOS -->
+                    <div class="main-profile">					
+                        <div></div>
+                        <div class="profile-imagen">
+                            <img src="/uploads/<%= datosAmigo.foto %>">
+                        </div>
+                        <div class="profile-datas tittle-pages">
+                            
+                            <div class="profile-age"> 
+                                <%= datosAmigo.fecha %>
+                            </div>
+                            <div class="profile-sex"> 
+                                <%= datosAmigo.sexo %>
+                            </div>
+                            <div class="profile-points"> 
+                                <%= datosAmigo.puntos %>
+                            </div>							
+                        </div>
+                    </div>
+                </divProfile>
+            </div>
+            <div class="containerFotos">
+                <% datosBD.forEach(u => { %>     
+                        
+                            <div class="element-inlineBlock">
+                                <img src="/uploads/<%= u.fotoUsuarios %>">
+                                <div class="descripcionFoto">  <%= u.descripcion %></div>
+                            </div> 
+                        
+                            
+                <% }); %>
+            </div>
+            <footer></footer>
+        </div>
+    </body>
+</html>

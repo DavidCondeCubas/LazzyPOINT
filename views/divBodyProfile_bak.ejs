@@ -1,0 +1,37 @@
+<divProfile>
+    <h2 class="tittle-pages">Tu Perfil</h2>
+    <!-- BLOQUE LOGO Y DATOS -->
+    <div class="main-profile">					
+        <div class="profile-imagen">
+            <img src="/uploads/<%= datos.foto %>">
+        </div>
+        <div class="profile-datas tittle-pages">
+            <div class="nombre-perfil">
+                <%= datos.nombCompl %>
+            </div> 
+            <div class="profile-age"> 
+                <%= datos.fecha %>
+            </div>
+            <div class="profile-sex"> 
+                <%= datos.sexo %>
+            </div>
+            <div class="profile-points"> 
+                <%= datos.puntos %>
+            </div>							
+        </div>
+    </div>
+    <!-- BLOQUE TEXTO CON ENLAE-->
+    <div class="button-action"><a href="/modifyUser">Modificar Perfil</a></div>
+    <div class="element-inlineBlock button-action"><a href="/uploadFoto">Subir foto</a></div>
+    <div class="containerFotos">
+                     
+            <!-- <% datosBD.forEach(u => { %>     
+                        <div class="element-inlineBlock">
+                            <img src="/uploads/<%= u.fotoUsuarios %>">
+                            <div class="descripcionFoto">  <%= u.descripcion %></div>
+                        </div> 
+            <% }); %> -->
+       
+    </div>
+
+</divProfile>

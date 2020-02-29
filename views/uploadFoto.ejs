@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FaceBluff</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <img src="images/img/Logo.png" alt="Logo de la empresa"/>
+            </header>
+            <nav>  
+                <%- include("divHeaderUser") %>               
+            </nav>
+            <div id="principal">
+                <form action="/Form_upload" method="post" name="enter_user" enctype="multipart/form-data">
+                    <table>
+                    <tr>
+                        <td>Descripcion: </td>
+                        <td><input class="table-input-text-witdh" type="text" name="descripcion" placeholder="Escriba aqui" required /><br></td>
+                    </tr>
+                    <tr>
+                        <td>Seleccione Foto:</td>
+                        <td><input name="file" type="file" size="2" required/></td>
+                    </tr> 
+                    
+                    <tr>
+                        <td class="table-align-center" colspan="2"><input type="submit" value="Subir"/></td>
+                        
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <footer></footer>
+        </div>
+    </body>
+</html>

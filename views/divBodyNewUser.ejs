@@ -1,0 +1,40 @@
+<divNewUser>
+<h2 class="main-title-page">Nuevo Usuario</h2>
+<form action="user_page.html" method="post" name="enter_user" enctype="multipart/form-data">
+    <table>
+    <tr>
+        <td>Email: </td>
+        <td><input class="table-input-text-witdh" type="text" name="email" placeholder="email" required /><br></td>
+    </tr>
+    <tr>
+        <td>Password:</td>
+        <td><input class="table-input-text-witdh" type="password" name="pass" placeholder="password" required/><br></td>
+    </tr>
+    <tr>
+        <td>Nombre Completo:</td>
+        <td><input class="table-input-text-witdh" type="text" name="name" placeholder="Nombre Completo" required/><br></td>
+    </tr>
+    <tr>
+        <td>Sexo:</td>
+        <td>
+                <input type="radio" name="sexo" value="hombre" required>Hombre
+                <input type="radio" name="sexo" value="mujer" required>Mujer
+                <input type="radio" name="sexo" value="otro" required>Otro
+        </td>
+    </tr>
+    <tr>
+        <td>Fecha de Nacimiento:</td>
+        <td><input type="text" name="date" placeholder="YYYY-MM-DD" required/><br></td>
+    </tr>
+    <tr>
+        <td>Selecciona Avatar:</td>
+        <td><input name="file" type="file" size="2" required/></td>
+    </tr> 
+    
+    <tr>
+        <td class="table-align-center" colspan="2"><input type="submit" value="Conectar"/></td>
+        
+    </tr>
+</table>
+</form>
+</divNewUser>

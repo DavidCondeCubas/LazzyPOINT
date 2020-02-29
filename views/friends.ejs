@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>FaceBluff</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <img src="images/img/Logo.png" alt="Logo de la empresa"/>
+            </header>
+            <nav>  
+                <%- include("divHeaderUser") %>               
+            </nav>
+            <div id="principal">
+                    <div id="friends-principal" class="alinear-centro alinear-centro ">
+                            <h2 class="tittle-pages">Solicitudes de Amistad</h2>
+                            <!-- Tabla con los resultados de amigos -->
+                                <% datosBD.forEach(u => { %>     
+                                    <% if (u.estado === "NO") { %>  
+                                        <div>
+                                            <div class="element-inlineBlock imagen-mini">
+                                                <img src="/uploads/<%= u.foto %>">
+                                            </div> 
+                                            <div class="element-inlineBlock" ><a style="color:black" href="/perfilAmigo/<%= u.user2 %>"><%= u.nombreCompleto %></a></div>
+                                            <form  class="element-inlineBlock" action="/aceptarAmigo" method="POST"><input type="hidden" name="ident" value = "<%= u.user2 %>"><input class="button-action button-action-friends" type="submit" value="Aceptar"></form>
+                                            <form  class="element-inlineBlock" action="/rechazarAmigo" method="POST"><input type="hidden" name="ident" value = "<%= u.user2 %>"><input class="button-action button-action-friends" type="submit" value="Rechazar"></form>
+                                        </div>
+                                    <% } %> 
+                                <% }); %>
+                           
+                        
+                            <h2 class="tittle-pages" >Búsqueda de amigos</h2>
+                                <div class="element-inlineBlock">Buscar por nombre: </div>
+                                <form class="element-inlineBlock" action="/buscarNoAmigos" method="POST">
+                                    <input type="text" name="nombre">
+                                    <input class="button-action button-action-friends" type="submit" value="Buscar">
+                                </form>
+                                
+                            <h2 class="tittle-pages">Mis amigos</h2>
+                            <% datosBD.forEach(u => { %> 
+                                <% if (u.estado === "SI") { %> 
+                                <div>
+                                    <div class="element-inlineBlock imagen-mini">
+                                        <img src="/uploads/<%= u.foto %>">
+                                    </div>
+                                    <div class="element-inlineBlock" ><a style="color:black" href="/perfilAmigo/<%= u.user2 %>"><%= u.nombreCompleto %></a></div>
+                                    <div class="friends-adjust  element-inlineBlock"></div>	
+                                </div>
+                                <% } %> 
+                            <% }); %>	
+                        </div>
+            </div> 
+            <footer></footer>
+        </div>
+    </body>
+</html>

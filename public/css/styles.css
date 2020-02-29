@@ -1,0 +1,230 @@
+/* ESTILOS PARA TODAS LAS PAGINAS*/
+/*titulo de las paginas html */
+.tittle-pages {
+	font-family: "Comic Sans MS", "Comic Sans";
+}
+.alinear-centro {
+	text-align: center;
+}
+#main {
+    background-image:url(../images/img/Fondo.jpg);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+a:link {
+    text-decoration: none;
+    color:white;
+}
+a:hover {
+    text-decoration: none;
+    color:white;
+}
+a:visited {
+    text-decoration: none;
+    color:white;
+}
+
+.button-action {
+	background-color: purple;
+	width:  200px;
+	border-radius: 10px;
+	margin: 0 auto;
+	padding: 10px;
+	color: white;
+	font-family: "Comic Sans MS", "Comic Sans";
+}
+
+.button-action:hover {
+	background-color: #f633ff;
+}
+
+.element-inlineBlock {
+	display: inline-block;
+        margin-top: 10px;
+        margin-bottom: 10px;
+}
+
+/*INDEX.HTML STYLES*/
+
+img {
+    display:block;
+    margin:auto;
+    height: 80px;
+}
+nav {
+    margin-left: 80px;
+    color:white;
+    font-family: "Comic Sans MS", "Comic Sans";
+    font-size: 24px;
+}
+nav li {
+    display: inline;
+    list-style-type: none;
+    padding: 10px; 
+}
+
+#principal {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.main-title-page {
+     font-family: "Comic Sans MS", "Comic Sans";
+}
+
+#principal table {
+    text-align: center;
+    display:inline-block;
+    background-color: #990073;
+    border-radius: 10px;
+    padding:30px;
+    color: white;
+    
+}
+
+table td {
+    text-align: left;
+}
+.table-align-center {
+    text-align: center;
+}
+.table-input-text-witdh {
+    width: 80%;
+}
+/*PROFILE*/
+
+.profile-nav-points {
+	width: 20px;
+	height: 20px;
+	display:inline-block;
+}
+
+.nav-points {
+	font-size: 14px;
+	margin: 5px;
+}
+
+.main-profile {
+	padding-bottom: 30px;
+}
+
+.imagen-logo {
+	display:inline-block;
+	width: 25px;
+	height: 25px;
+
+}
+
+.imagen-mini img {
+	width: 30px;
+	height: 30px;	
+	display:inline-block;
+}
+
+.profile-imagen {
+	display: inline-block;
+	margin-right: 50px;
+}
+
+.profile-datas {
+	display: inline-block;
+	margin-top: 0px;
+}
+
+
+/*FRIENDS PAGE*/
+
+#friends-principal {
+	margin-top: 80px;
+    text-align: center;
+}
+
+#friends-principal h2{
+	text-align: center
+}
+
+.button-action-friends {
+	width: 80px;
+	padding-top:5px;
+	padding-botton:5px;
+}
+
+.friends-name {
+	width: 250px;
+	text-align: left;
+	margin-left: 20px;
+}
+
+.friends-input input {
+	width: 280px;
+	color: #6a6969;
+	font-style: italic;
+}
+.friends-adjust {
+	width:200px;
+}
+
+/* Página SearchResult.html*/
+
+.button-action-searchResult {
+	width: 200px;
+	margin-left: 50px;
+}
+
+
+/* Página askQuestions*/
+.ask-clear {
+	overflow: hidden;
+}
+.ask-question {
+	background-color: #e0a21d;
+	color: purple;
+	width: 500px;
+	max-width: 500px;
+	display: inline-block;
+}
+.ask-question a {
+	color: purple;
+}
+
+
+/* Página modificar perfil*/
+
+.modify-separator {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.modify-width-age input {
+    width: 25px;
+    margin-right: 10px;
+}
+
+.modify-imagen {
+    margin-right: 50px;
+}
+.modify-imagen img{
+	width: 150px;
+        height: 150px;
+}
+
+/* Página RESPONSEQUESTIONS*/
+#rQuestions-principal {
+    margin-top: 80px;
+    text-align: left;
+    margin-left: 300px;
+}
+
+.rQuestions-space-button {
+   // margin-right: 250px;
+   float:right;
+   margin-right: 300px;
+   margin-top: 30px;
+}
+
+.position-left {
+    text-align: center;
+    display:table-cell;
+    text-align: left;
+}
+
