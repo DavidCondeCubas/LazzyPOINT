@@ -48,6 +48,9 @@ const middlewareSession = session({
 });
 app.use(middlewareSession);
 
+
+
+
 app.get("/", function(req, res)
 {   
     if(req.session.usuario === undefined){ 
@@ -59,15 +62,14 @@ app.get("/", function(req, res)
         });
     }
     else{
-        var datosTest ={
+        var datosTest = {
             foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
             email: "yconde@ucm.es",
             nombCompl: "David Conde Cubas",
             fecha: "29/02/2020",
             sexo: "Masculino",
             puntos: 130
-        };
- 
+        }
 
         // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
         res.render("index", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});

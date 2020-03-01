@@ -1,5 +1,6 @@
-<div class="body-signup">
-    <div class="row">
+<%- include("../includes/headerlogin") %>
+<div class="body-loginsignup">
+    <div class="row justify-content-center align-items-center minh-100">
         <div class="col-sm">
             <h2 class="text-center">Registrarse</h2>
             <form action="/registration" method="post">
@@ -27,6 +28,24 @@
                 </div>
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-lg btn-primary">Registrarse</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-line"></div>
+        <div class="col-sm">
+            <h2 class="text-center">Login</h2>
+            <form action="/log" method="post">
+                <div class="form-group">
+                    <label for="nick">Nick o email</label>
+                    <input type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick o email">
+                    <small id="nickHelp" class="form-text text-muted">Introduce tu contraseña o email</small>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Constraseña</label>
+                    <input type="password" class="form-control" id="pwd" placeholder="Contraseña">
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-lg btn-primary">Acceder</button>
                 </div>
             </form>
         </div>

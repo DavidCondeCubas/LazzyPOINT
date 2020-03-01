@@ -228,12 +228,28 @@ table td {
     text-align: left;
 }
 
-.body-login {
+.body-login, .body-signup {
     vertical-align: middle;
-    min-width: 400px;
     position: relative;
     float: left;
     top: 50%;
     left: 50%;
     transform: translate(-50%, 50%);
+}
+
+
+.body-loginsignup {
+    border-color: #ff0000;
+    border: 1px solid #ff0000;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+header > hr {
+    border-color: #ff0000;
+}
+
+.init-page {
+    max-width: 600px;
+    margin: 20px auto;
 }
