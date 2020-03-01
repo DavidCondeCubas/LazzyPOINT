@@ -166,7 +166,84 @@ app.post("/log", function(req, res) {
         nombCompl: "David Conde Cubas",
         idrol: 1
     }; 
+    var datosTest ={
+        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        fecha: "29/02/2020",
+        sexo: "Masculino",
+        puntos: 130
+    }; 
+    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
+    res.render("homepage", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
 });
+
+app.get("/log", function(req, res) { //solo test
+    var datosReq = req.body;
+    console.log(datosReq);
+    var datosTest ={
+        nick: "admin",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        idrol: 1
+    }; 
+    var datosTest ={
+        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        fecha: "29/02/2020",
+        sexo: "Masculino",
+        puntos: 130
+    }; 
+    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
+    res.render("homepage", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+});
+
+
+app.get("/presentaciones", function(req, res) { //solo test
+    var datosReq = req.body; 
+    var datosTest ={
+        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        fecha: "29/02/2020",
+        sexo: "Masculino",
+        puntos: 130
+    }; 
+    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
+    res.render("presentation", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+});
+
+app.get("/galeriaImagenes", function(req, res) { //solo test
+    var datosReq = req.body;
+    
+    var datosTest ={
+        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        fecha: "29/02/2020",
+        sexo: "Masculino",
+        puntos: 130
+    }; 
+    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
+    res.render("galeria", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+});
+
+app.get("/contacto", function(req, res) { //solo test
+    var datosReq = req.body;
+    
+    var datosTest ={
+        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
+        email: "yconde@ucm.es",
+        nombCompl: "David Conde Cubas",
+        fecha: "29/02/2020",
+        sexo: "Masculino",
+        puntos: 130
+    }; 
+    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
+    res.render("contacto", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+});
+
 
 app.get("/modifyUser", function(req, res) {
     res.render("index", {origen:"modifyUser", datos: req.session.usuario,datosBD: req.session.datosBD});

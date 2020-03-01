@@ -1,0 +1,32 @@
+<%- include("../includes/header") %>
+<div class="border border-gray" style="margin-right:20px; margin-left: 20px;">
+    <h3 class="text-center" style="margin-top: 10px;"> Presentaciones</h3>
+    <div class="row"> 
+        <div class="col-12 d-flex justify-content-center">
+            <form class="col-6 col-xl-4" action="/log" method="post">
+                <div class="form-group">
+                    <label for="color">Color: </label>
+                    <input type="text" class="form-control" id="color" aria-describedby="ColorHelp">
+                    <small id="ColorHelp" class="form-text text-muted">Introduce el color</small>
+                </div>
+                <div class="form-group">
+                    <label for="duracion">Duración: </label>
+                    <input type="text" class="form-control" id="duracion" aria-describedby="DuracionHelp">
+                    <small id="DuracionHelp" class="form-text text-muted">Introduce la duración</small>
+                </div>
+                <div class="form-group">
+                    <label for="tema">Tema: </label>
+                    <input type="text" class="form-control" id="tema" aria-describedby="TemaHelp">
+                    <small id="TemaHelp" class="form-text text-muted">Introduce el tema</small>
+                </div>
+               
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-lg btn-primary">Aceptar</button>
+                </div>
+                <div class = "form-group text-center">
+                    <button type = "submit" class = "btn btn-lg btn-warning">Opciones Avanzadas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

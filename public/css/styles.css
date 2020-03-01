@@ -52,10 +52,10 @@ img {
     height: 80px;
 }
 nav {
-    margin-left: 80px;
+    /* margin-left: 80px;
     color:white;
     font-family: "Comic Sans MS", "Comic Sans";
-    font-size: 24px;
+    font-size: 24px; */
 }
 nav li {
     display: inline;
@@ -239,17 +239,27 @@ table td {
 
 
 .body-loginsignup {
-    border-color: #ff0000;
-    border: 1px solid #ff0000;
+    border-color: gray;
+    border: 1px solid gray;
     padding-left: 12px;
     padding-right: 12px;
 }
 
 header > hr {
-    border-color: #ff0000;
+    border-color: gray;
 }
 
 .init-page {
     max-width: 600px;
     margin: 20px auto;
+}
+
+.menuButton{ 
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 4px 0px rgba(130,130,130,1);
+    -moz-box-shadow: 2px 2px 4px 0px rgba(130,130,130,1);
+    box-shadow: 2px 2px 4px 0px rgba(130,130,130,1);
+}
+.card-img-top{
+    height: 140px;
 }
