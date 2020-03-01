@@ -33,6 +33,7 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "npm run dev",
+    "build": "node build/buid.js"
   }
 }
