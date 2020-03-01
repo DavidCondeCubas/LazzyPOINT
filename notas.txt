@@ -1,3 +1,0 @@
-//Estaria bien hacer la web con el patrón MVC
-
-nodemon main.js --> ejecuta el servidor y aunque se hagan cambios se reinicia solo.
