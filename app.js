@@ -59,7 +59,6 @@ app.post("/menu", function(req, res) {
     res.render("homepage",null);
 });
 
-
 app.get("/presentaciones", function(req, res) { //solo test
     var datosReq = req.body; 
     var datosTest ={
@@ -105,7 +104,9 @@ app.get("/contacto", function(req, res) { //solo test
 });
 
 
-app.listen(3000, (err)=>{
+const port = process.env.PORT || 3000;
+
+app.listen(port, (err)=>{
     if(err){
         console.log("Problemas al arrancar el servidor:", err);
     }
