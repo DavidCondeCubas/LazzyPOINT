@@ -49,58 +49,28 @@ const middlewareSession = session({
 app.use(middlewareSession);
 
 
-
-
 app.get("/", function(req, res) {   
-    res.render("index",null);
+    res.render("index");
+});
+
+app.get("/menu", function(req, res) {
+    res.render("homepage");
 });
 
 app.post("/menu", function(req, res) {
-    res.render("homepage",null);
+    res.render("homepage");
 });
 
 app.get("/presentaciones", function(req, res) { //solo test
-    var datosReq = req.body; 
-    var datosTest ={
-        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
-        email: "yconde@ucm.es",
-        nombCompl: "David Conde Cubas",
-        fecha: "29/02/2020",
-        sexo: "Masculino",
-        puntos: 130
-    }; 
-    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
-    res.render("presentation", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+    res.render("presentation");
 });
 
 app.get("/galeriaImagenes", function(req, res) { //solo test
-    var datosReq = req.body;
-    
-    var datosTest ={
-        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
-        email: "yconde@ucm.es",
-        nombCompl: "David Conde Cubas",
-        fecha: "29/02/2020",
-        sexo: "Masculino",
-        puntos: 130
-    }; 
-    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
-    res.render("galeria", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+    res.render("galeria");
 });
 
 app.get("/contacto", function(req, res) { //solo test
-    var datosReq = req.body;
-    
-    var datosTest ={
-        foto: "https://cdn2.iconfinder.com/data/icons/ui-1/60/05-512.png",
-        email: "yconde@ucm.es",
-        nombCompl: "David Conde Cubas",
-        fecha: "29/02/2020",
-        sexo: "Masculino",
-        puntos: 130
-    }; 
-    // res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD});
-    res.render("contacto", {origen:"logeado", datos: datosTest,datosBD: req.session.datosBD});
+    res.render("contacto");
 });
 
 
