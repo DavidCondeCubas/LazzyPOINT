@@ -32,11 +32,15 @@
     "util": "^0.10.4"
   },
   "scripts": {
+    "pretest": "eslint --ignore-path .gitignore .",
     "dev": "nodemon app.js",
     "start": "node app.js"
   },
   "engines": {
     "node": "13.8.x",
     "npm": "6.13.x"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
   }
 }
