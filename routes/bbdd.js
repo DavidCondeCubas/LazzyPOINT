@@ -101,7 +101,8 @@ const pool = mysql.createPool({
     { 
         pool.getConnection((err, connection) => {
                 if (err) { callback(err); return; }
-                connection.query("SELECT amigos.user2,amigos.estado,users.foto,users.nombreCompleto FROM amigos INNER JOIN users ON (amigos.user2 = users.email) WHERE user1 = ?",
+                const queryString = "SELECT amigos.user2,amigos.estado,users.foto,users.nombreCompleto FROM amigos INNER JOIN users ON (amigos.user2 = users.email) WHERE user1 = ?";
+                connection.query(queryString,
                 [email],
                 (err, rows) => {
                     if (err){
@@ -117,7 +118,9 @@ const pool = mysql.createPool({
     { 
         pool.getConnection((err, connection) => {
                 if (err) { callback(err); return; }
-                connection.query("SELECT DISTINCT * FROM (SELECT user2 FROM amigos WHERE user1= ?) a RIGHT JOIN (SELECT * FROM users) b ON (a.user2 = b.email ) WHERE a.user2 is null and b.email like '%"+cadena+"%' and b.email != ?",
+                const firtsQueryPart = "SELECT DISTINCT * FROM (SELECT user2 FROM amigos WHERE user1= ?) a RIGHT JOIN (SELECT * FROM users) b ON (a.user2 = b.email ) WHERE a.user2 is null and b.email like '%"; 
+                const queryString = firtsQueryPart+cadena+"%' and b.email != ?";
+                connection.query(queryString,
                 [email,email],
                 (err, rows) => {
                     if (err) { callback(err); return; }
