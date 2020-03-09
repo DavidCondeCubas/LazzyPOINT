@@ -81,3 +81,5 @@ app.listen(port, (err)=>{
         console.log("Problemas al arrancar el servidor:", err);
     }
 });
+
+module.exports = app;
