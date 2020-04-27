@@ -1,4 +1,4 @@
-<%- include("../includes/headerlogin") %>
+<%- include("../includes/header") %>
 <div class="body-loginsignup">
     <div class="row justify-content-center align-items-center minh-100">
         <div class="col-sm">
@@ -37,16 +37,18 @@
             <form action="/menu" method="post">
                 <div class="form-group">
                     <label for="nick">Nick o email</label>
-                    <input type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick o email">
+                    <input name="nick"  type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick o email">
                     <small id="nickHelp" class="form-text text-muted">Introduce tu contraseña o email</small>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Constraseña</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Contraseña">
+                    <label for="pwd">Contraseña</label>
+                    <input name="pwd" type="password" class="form-control" id="pwd" placeholder="Contraseña">
                 </div>
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-lg btn-primary">Acceder</button>
                 </div>
+
+                <p class="h3 text-danger"><%= error %></p>
             </form>
         </div>
     </div>
