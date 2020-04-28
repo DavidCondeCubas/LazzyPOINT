@@ -213,7 +213,7 @@ app.get("/modifyProfile", function(req, res) { //solo test
             res.status(200);
             var datosBD = JSON.parse(JSON.stringify(results));  
             
-            res.render("modifyProfile",{datos: datosBD[0],error: "",respuesta: ""});
+            res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
             
             //res.render("modifyProfile"); 
             res.end(); 
