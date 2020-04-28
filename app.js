@@ -33,11 +33,17 @@ app.use(expressValidator());
 const session = require("express-session");
 const mysqlSession = require("express-mysql-session");
 const MySQLStore = mysqlSession(session);
+// const sessionStore = new MySQLStore({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "lazzypoint"
+// });
 const sessionStore = new MySQLStore({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "lazzypoint"
+    host: "sql7.freemysqlhosting.net",
+    user: "sql7336353",
+    password: "RRA7LkAdcf",
+    database: "sql7336353"
 });
 
 const middlewareSession = session({
@@ -68,6 +74,57 @@ app.get("/", function(req, res) {
 
 app.get("/menu", function(req, res) {
     res.render("homepage");
+});
+
+app.post("/registro", function(req, res) {
+
+    var nuevoUsuario = { 
+        nick: req.body.nick,
+        email: req.body.email,
+        password: req.body.pwd,
+        rol: req.body.rol
+    }
+
+    bd.existNick(nuevoUsuario, function(err, results) {
+        if (err !== null) {
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+        }
+        if (results !== false) {
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El nick ya existe en el sistema"});
+        }
+        else{
+            bd.existEmail(nuevoUsuario, function(err, results) {
+                if (err !== null) {
+                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+                }
+                if (results !== false) {
+                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El email ya existe en el sistema"});
+                }
+                else{
+                    bd.insertarUsuario(nuevoUsuario, function(err, results) {
+                        if (err !== null) {
+                            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+                        }
+                        if (results !== false) {
+                            res.status(200);
+                            var datosBD = []; 
+                            let usuario = { 
+                                usuario: nuevoUsuario.nick
+                            }
+                            req.session.usuario= usuario;
+                            req.session.datosBD= datosBD;
+                            res.render("homepage",{origen:"logeado", datos: usuario});
+                            res.end();
+                        }
+                        else{
+                            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Hubo problemas al insertar en base datos"});
+                        }
+                    })
+                }
+            });  
+        }
+    }); 
+
 });
 
 app.post("/menu", function(req, res) {
@@ -103,7 +160,7 @@ app.post("/modifyUser", function(req, res) {
     bd.checkUser(req.body, function(err, results) {
         if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
             //res.render("error", { message: "Problema BBDD",error: err });        
-        if (results == false) { // no existe usuario con este correo o nick 
+        if (results == false || req.session.usuario.usuario == req.body.nick) { // no existe usuario con este correo o nick 
             var data={
                 username: req.session.usuario.usuario,
                 email: req.body.email,
@@ -128,8 +185,7 @@ app.post("/modifyUser", function(req, res) {
                     res.render("modifyProfile",{datos: datosBD,error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
                 }); 
         }
-        else // existe usuario con email o correo igual
-        
+        else // existe usuario con email o correo igual 
             res.render("modifyProfile",{datos: datosBD,error: "Este nick ya esta en uso.",respuesta: ""});
         });
 });

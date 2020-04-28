@@ -1,11 +1,18 @@
 var mysql = require("mysql");
  
+// const pool = mysql.createPool({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "lazzypoint"
+// });
+
 const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "lazzypoint"
-});
+    host: "sql7.freemysqlhosting.net",
+    user: "sql7336353",
+    password: "RRA7LkAdcf",
+    database: "sql7336353"
+}); 
 
 /**
      * Determina si un determinado usuario aparece en la BD con la contraseña
@@ -111,22 +118,72 @@ const pool = mysql.createPool({
             });
     };
 
+    exports.existNick = function(datos, callback)
+    {
+        pool.getConnection((err, connection) => {
+            if (err)
+            {
+                callback(err);
+                return;
+            }
+            connection.query("SELECT * FROM users WHERE NICK = ?", [datos.nick],
+            (err, rows) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                connection.release();
+                if (rows.length === 0) {
+                    callback(null, false);
+                }
+                else {
+                    callback(null, rows);
+                }
+            });
+        });
+    };
+
+    exports.existEmail = function(datos, callback)
+    {
+        pool.getConnection((err, connection) => {
+            if (err)
+            {
+                callback(err);
+                return;
+            }
+            connection.query("SELECT * FROM users WHERE EMAIL = ?", [datos.email],
+            (err, rows) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                connection.release();
+                if (rows.length === 0) {
+                    callback(null, false);
+                }
+                else {
+                    callback(null, rows);
+                }
+            });
+        });
+    };
+    
     exports.insertarUsuario = function(datos, callback)
     {  
        pool.getConnection((err, connection) => {
-             if (err) 
-             { 
-                 callback(err); return; 
-             }      
-             connection.query("INSERT INTO users(email, fechaNacimiento, nombreCompleto, password, sexo,foto) VALUES (?, ? , ?, ?, ?, ?)",
-             [datos.email, datos.fecha, datos.nombCompl, datos.pass, datos.sexo, datos.foto],
-            (err, result) => {
-                 connection.release();
-                 if (err) {
+            if (err) 
+            { 
+                callback(err); return; 
+            }      
+            connection.query("INSERT INTO users (NICK, EMAIL, PASSWORD, STATE, ID_ROL) VALUES (?, ?, ?, 1, (SELECT ID_ROL FROM roles WHERE ID_ROL = ?))",
+                [datos.nick, datos.email, datos.password, datos.rol],
+                (err, result) => {
+                connection.release();
+                if (err) {
                     callback(null, false);
-                 } else {
+                } else {
                     callback(null, true);
-                 }
+                }
              });
          });
     };

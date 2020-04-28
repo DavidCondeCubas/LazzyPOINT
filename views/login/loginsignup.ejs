@@ -1,29 +1,29 @@
-<%- include("../includes/header") %>
+<%- include("../includes/header") %> 
 <div class="body-loginsignup">
     <div class="row justify-content-center align-items-center minh-100">
         <div class="col-sm">
             <h2 class="text-center">Registrarse</h2>
-            <form action="/menu" method="post">
+            <form action="/registro" method="post">
                 <div class="form-group">
                     <label for="nick">Nick</label>
-                    <input type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick">
+                    <input name="nick" type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick">
                     <small id="nickHelp" class="form-text text-muted">Introduce tu usuario</small>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+                    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
                     <small id="emailHelp" class="form-text text-muted">Introduce tu email</small>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Constraseña</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Contraseña">
+                    <label for="pwd">Contraseña</label>
+                    <input name="pwd" type="password" class="form-control" id="pwd" placeholder="Contraseña">
                 </div>
                 <div class="form-group">
                     <label for="rol">Rol</label>
-                    <select class="form-control" id="rol">
-                        <option>Diseñador</option>
-                        <option>Aportador</option>
-                        <option>Moderador</option>
+                    <select name="rol" class="form-control" id="rol">
+                        <option value="1">Diseñador</option>
+                        <option value="2">Aportador</option>
+                        <option value="3">Moderador</option>
                       </select>
                 </div>
                 <div class="form-group text-center">
