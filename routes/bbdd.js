@@ -38,6 +38,60 @@ const pool = mysql.createPool({
          });
     };
 
+    exports.checkUser = function(datos, callback)
+    {  
+       pool.getConnection((err, connection) => {
+             if (err) { callback(err); return; }
+             connection.query("SELECT * FROM users WHERE nick = ? ",
+             [datos.nick],
+             (err, rows) => {
+                 if (err) { callback(err); return; }
+                 connection.release();
+                 if (rows.length === 0) {
+                     callback(null, false);
+                 } else {
+                     callback(null, rows);
+                 }
+             });
+         });
+    };
+
+    exports.updateUser = function(datos, callback)
+    {  
+       pool.getConnection((err, connection) => {
+             if (err) { callback(err); return; }
+             connection.query("UPDATE users SET email = ?, nick = ?, password=?  WHERE nick like ?;",
+             [datos.email,datos.nick,datos.pwd,datos.username],
+             (err, rows) => {
+                 if (err) { callback(err); return; }
+                 connection.release();
+                 if (rows.length === 0) {
+                     callback(null, false);
+                 } else {
+                     callback(null, rows);
+                 }
+             });
+         });
+    };
+
+    exports.getUserData = function(datos, callback)
+    {  
+       pool.getConnection((err, connection) => {
+             if (err) { callback(err); return; }
+             connection.query("SELECT * FROM users u RIGHT JOIN roles r ON (u.ID_ROL = r.ID_ROL) WHERE (email = ? or nick = ?)",
+             [datos.usuario,datos.usuario],
+             (err, rows) => {
+                 if (err) { callback(err); return; }
+                 connection.release();
+                 if (rows.length === 0) {
+                     callback(null, false);
+                 } else {
+                     callback(null, rows);
+                 }
+             });
+         });
+    };
+
     
     exports.getDatos = function(email, callback)
     { 

@@ -58,7 +58,10 @@ app.get("/", function(req, res) {
         res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: ''});
     }
     else{
-        res.render("index", {origen:"logeado", datos: req.session.usuario,datosBD: req.session.datosBD,error: ''});
+        let usuario = { 
+            usuario:  req.session.usuario.usuario
+        }
+        res.render("homepage", {origen:"logeado", datos: usuario});
     }
     res.end(); 
 });
@@ -90,6 +93,48 @@ app.post("/menu", function(req, res) {
         });
 });
 
+app.post("/modifyUser", function(req, res) {   
+    var datosBD= { 
+        EMAIL:req.body.email,
+        NAME:req.body.rol,
+        NICK: req.body.nick,
+        PASSWORD:req.body.pwd, 
+    }; 
+    bd.checkUser(req.body, function(err, results) {
+        if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
+            //res.render("error", { message: "Problema BBDD",error: err });        
+        if (results == false) { // no existe usuario con este correo o nick 
+            var data={
+                username: req.session.usuario.usuario,
+                email: req.body.email,
+                nick: req.body.nick,
+                pwd: req.body.pwd
+            }
+            bd.updateUser(data, function(err, results) {
+                if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
+                    //res.render("error", { message: "Problema BBDD",error: err });        
+                if (results !== false) {
+                    res.status(200);  
+                    let usuario = { 
+                        usuario: data.nick
+                    }
+                    req.session.usuario= usuario; 
+                    datosBD.nick = data.nick;
+                    
+                    res.render("modifyProfile",{datos: datosBD,error: "",respuesta: "Datos actualizados correctamente."});
+                    res.end(); 
+                }
+                else
+                    res.render("modifyProfile",{datos: datosBD,error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
+                }); 
+        }
+        else // existe usuario con email o correo igual
+        
+            res.render("modifyProfile",{datos: datosBD,error: "Este nick ya esta en uso.",respuesta: ""});
+        });
+});
+
+
 app.get("/presentaciones", function(req, res) { //solo test
     res.render("presentation");
 });
@@ -102,6 +147,25 @@ app.get("/contacto", function(req, res) { //solo test
     res.render("contacto");
 });
 
+app.get("/modifyProfile", function(req, res) { //solo test
+    var usuario = req.session.usuario;
+    // res.render("homepage"); 
+    bd.getUserData(usuario, function(err, results) {
+        if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
+            //res.render("error", { message: "Problema BBDD",error: err });        
+        if (results !== false) {
+            res.status(200);
+            var datosBD = JSON.parse(JSON.stringify(results));  
+            
+            res.render("modifyProfile",{datos: datosBD[0],error: "",respuesta: ""});
+            
+            //res.render("modifyProfile"); 
+            res.end(); 
+        }
+        else
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
+        });
+});
 
 const port = process.env.PORT || 3000;
 
