@@ -178,15 +178,15 @@ app.post("/modifyUser", function(req, res) {
                     req.session.usuario= usuario; 
                     datosBD.nick = data.nick;
                     
-                    res.render("modifyProfile",{datos: datosBD,error: "",respuesta: "Datos actualizados correctamente."});
+                    res.render("modifyprofile",{datos: datosBD,error: "",respuesta: "Datos actualizados correctamente."});
                     res.end(); 
                 }
                 else
-                    res.render("modifyProfile",{datos: datosBD,error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
+                    res.render("modifyprofile",{datos: datosBD,error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
                 }); 
         }
         else // existe usuario con email o correo igual 
-            res.render("modifyProfile",{datos: datosBD,error: "Este nick ya esta en uso.",respuesta: ""});
+            res.render("modifyprofile",{datos: datosBD,error: "Este nick ya esta en uso.",respuesta: ""});
         });
 });
 
