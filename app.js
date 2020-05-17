@@ -33,18 +33,18 @@ app.use(expressValidator());
 const session = require("express-session");
 const mysqlSession = require("express-mysql-session");
 const MySQLStore = mysqlSession(session);
-// const sessionStore = new MySQLStore({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "lazzypoint"
-// });
 const sessionStore = new MySQLStore({
-    host: "sql7.freemysqlhosting.net",
-    user: "sql7336353",
-    password: "RRA7LkAdcf",
-    database: "sql7336353"
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "lazzypoint"
 });
+// const sessionStore = new MySQLStore({
+//     host: "sql7.freemysqlhosting.net",
+//     user: "sql7336353",
+//     password: "RRA7LkAdcf",
+//     database: "sql7336353"
+// });
 
 const middlewareSession = session({
     saveUninitialized: false,
@@ -138,6 +138,7 @@ app.post("/menu", function(req, res) {
             res.status(200);
             var datosBD = JSON.parse(JSON.stringify(results)); 
             let usuario = { 
+                id: results[0].ID,
                 usuario:  results[0].NICK
             }
             req.session.usuario= usuario;
@@ -173,7 +174,8 @@ app.post("/modifyUser", function(req, res) {
                 if (results !== false) {
                     res.status(200);  
                     let usuario = { 
-                        usuario: data.nick
+                        usuario: data.nick,
+                        id: req.session.usuario.id
                     }
                     req.session.usuario= usuario; 
                     datosBD.nick = data.nick;
@@ -195,8 +197,41 @@ app.get("/presentaciones", function(req, res) { //solo test
     res.render("presentation");
 });
 
-app.get("/galeriaImagenes", function(req, res) { //solo test
-    res.render("galeria");
+app.get("/galeriaImagenes", function(req, res) {  
+    bd.getAllDataPhoto({}, function(err, results) {
+        if (err !== null) res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});   
+            //res.render("error", { message: "Problema BBDD",error: err });        
+        if (results !== false) { 
+            var datosBD = JSON.parse(JSON.stringify(results));  
+            var dataCleaned = {};
+            var dataUsers =[];
+
+            datosBD.forEach(element => {
+                if(dataCleaned[element.nick] == undefined){ 
+                    dataCleaned[element.nick] = [];
+                    dataUsers.push(element.nick);
+                } 
+                var dataInner ={
+                    name: element.NAME,
+                    descrip: element.DESCRIP,
+                    date: element.DATE_CREATION,
+                    nick: element.nick,
+                    id: element.ID
+                } 
+                dataCleaned[element.nick].push(dataInner) 
+            }); 
+   
+            res.status(200);
+            let fotos = req.session.datosBD; 
+            res.render("galeria",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
+//                   res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
+            
+            //res.render("modifyProfile"); 
+            res.end(); 
+        }
+        else
+        res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});    
+    }); 
 });
 
 app.get("/contacto", function(req, res) { //solo test
@@ -221,6 +256,58 @@ app.get("/modifyProfile", function(req, res) { //solo test
         else
             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
         });
+});
+
+app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
+    let usuario = { 
+        userID: req.session.usuario.id,
+        descripcion: req.body.udescrip,
+        ext: req.file.mimetype,
+        fotoUsuarios: req.file.filename
+    } 
+    bd.insertarFoto(usuario, function(err, results) {
+        if (err !== null) res.render("components/error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
+        if (results !== false) { 
+            bd.getAllDataPhoto({}, function(err, results) {
+                if (err !== null) res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});   
+                    //res.render("error", { message: "Problema BBDD",error: err });        
+                if (results !== false) { 
+                    var datosBD = JSON.parse(JSON.stringify(results));  
+                    var dataCleaned = {};
+                    var dataUsers =[];
+        
+                    datosBD.forEach(element => {
+                        if(dataCleaned[element.nick] == undefined){ 
+                            dataCleaned[element.nick] = [];
+                            dataUsers.push(element.nick);
+                        } 
+                        var dataInner ={
+                            name: element.NAME,
+                            descrip: element.DESCRIP,
+                            date: element.DATE_CREATION,
+                            nick: element.nick,
+                            id: element.ID
+                        } 
+                        dataCleaned[element.nick].push(dataInner) 
+                    }); 
+           
+                    res.status(200);
+                    let fotos = req.session.datosBD; 
+                    res.render("galeria",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
+        //                   res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
+                    
+                    //res.render("modifyProfile"); 
+                    res.end(); 
+                }
+                else
+                res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});    
+            }); 
+        }
+        else {
+            res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});  
+        }
+    });
+    
 });
 
 const port = process.env.PORT || 3000;

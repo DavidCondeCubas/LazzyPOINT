@@ -1,18 +1,18 @@
 var mysql = require("mysql");
  
-// const pool = mysql.createPool({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "lazzypoint"
-// });
-
 const pool = mysql.createPool({
-    host: "sql7.freemysqlhosting.net",
-    user: "sql7336353",
-    password: "RRA7LkAdcf",
-    database: "sql7336353"
-}); 
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "lazzypoint"
+});
+
+// const pool = mysql.createPool({
+//     host: "sql7.freemysqlhosting.net",
+//     user: "sql7336353",
+//     password: "RRA7LkAdcf",
+//     database: "sql7336353"
+// }); 
 
 /**
      * Determina si un determinado usuario aparece en la BD con la contraseña
@@ -99,6 +99,23 @@ const pool = mysql.createPool({
          });
     };
 
+    exports.getAllDataPhoto = function(datos, callback)
+    {  
+       pool.getConnection((err, connection) => {
+             if (err) { callback(err); return; }
+             connection.query("SELECT p.*,u.nick FROM photos p inner join users u ON (p.id_user = u.id) order by id_user,date_creation ASC",
+             [datos.usuario,datos.usuario],
+             (err, rows) => {
+                 if (err) { callback(err); return; }
+                 connection.release();
+                 if (rows.length === 0) {
+                     callback(null, false);
+                 } else {
+                     callback(null, rows);
+                 }
+             });
+         });
+    }; 
     
     exports.getDatos = function(email, callback)
     { 
@@ -282,8 +299,8 @@ const pool = mysql.createPool({
     {
         pool.getConnection((err, connection) => {
             if (err) { callback(err); return; }
-            connection.query("INSERT INTO fotosusuarios(email,descripcion,fotoUsuarios) VALUES (?,?,?)",
-            [datos.email,datos.descripcion,datos.fotoUsuarios],
+            connection.query("INSERT INTO photos(NAME,FORMAT,DATE_CREATION,ID_USER,DESCRIP) VALUES (?,?,now(),?,?)",
+            [datos.fotoUsuarios,datos.ext,datos.userID,datos.descripcion],
             (err, rows) => {
                 connection.release();
                 if (err) {

@@ -1,44 +1,42 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>FaceBluff</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
-        <div id="main">
-            <header>
-                <img src="images/img/Logo.png" alt="Logo de la empresa"/>
-            </header>
-            <nav>  
-                <%- include("divHeaderUser") %>               
-            </nav>
-            <div id="principal">
-                <form action="/Form_upload" method="post" name="enter_user" enctype="multipart/form-data">
-                    <table>
-                    <tr>
-                        <td>Descripcion: </td>
-                        <td><input class="table-input-text-witdh" type="text" name="descripcion" placeholder="Escriba aqui" required /><br></td>
-                    </tr>
-                    <tr>
-                        <td>Seleccione Foto:</td>
-                        <td><input name="file" type="file" size="2" required/></td>
-                    </tr> 
-                    
-                    <tr>
-                        <td class="table-align-center" colspan="2"><input type="submit" value="Subir"/></td>
-                        
-                    </tr>
-                </table>
-                </form>
-            </div>
-            <footer></footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <form action="/Form_upload" method="post" name="enter_user" enctype="multipart/form-data" class="was-validated"> 
+        <div class="form-group">
+            <label for="upPhoto">Seleccione Imagen:</label>
+            <input type="file" class="form-control" id="upPhoto" placeholder="Select photo" name="file" required> 
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Extension not valid.</div>
         </div>
-    </body>
-</html>
+
+        <label for="inputExt" class="mr-sm-2">Extensión:</label>
+        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="No se ha seleccionado una imagen" id="inputExt" disabled>
+
+        <div class="form-group">
+            <label for="udescrip">Descripcion:</label>
+            <textarea type="text" class="form-control" id="udescrip" placeholder="Enter description" name="udescrip" required></textarea>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div> 
+
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button  type="submit" class="btn btn-info btn-lg">Save changes</button>
+        </div>
+    </form>
+    <script>
+        $("#upPhoto").change(function() {
+            var ext = $('#upPhoto').val().split('.').pop().toLowerCase();
+            if($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
+                $("#upPhoto").val("");
+                $("#inputExt").val("No se ha seleccionado una imagen");
+            }
+            else{
+                $("#inputExt").text($("#upPhoto").val().split('.').pop());
+                $("#inputExt").val($("#upPhoto").val().split('.').pop());
+            }
+        }); 
+    </script>
+
+          

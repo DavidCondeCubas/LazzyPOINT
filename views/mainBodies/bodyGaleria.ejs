@@ -3,105 +3,66 @@
     <h3 class="text-center mt-1">Galería de Imágenes</h3>
     
     <div class="col-12 d-flex mt-5 justify-content-around">
-			 
-        <div class="col-12 mt-5 justify-content-around"> 
-            <div class="col-12 bg-light pb-2">
-                <div class="col-12 ">
-                    <div class="h4">Usuario 1</div>
-                </div>
-                <div class="row" style="justify-content: space-evenly;/* width: 90%; */">
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.fondosanimales.com/Imagenes/fondo-artistico-de-un-gato.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
+       
+        <% dataUsernames.forEach (user => { %>   
+            <div class="col-12 mt-5 justify-content-around"> 
+                <div class="col-12 bg-light pb-2">
+                    <div class="col-12 ">
+                        <div class="h4"><%= user %></div>
                     </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://as.com/betech/imagenes/2016/10/20/portada/1476917621_605512_1476917718_noticia_normal.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    <div class="row" style="justify-content: space-evenly;/* width: 90%; */"> 
+                        <% dataPhoto[user].forEach (dataElement => { %>    
+                        <div class="card mt-1" style="width: 18rem;" value="<%= dataElement.id %>">
+                            <img class="card-img-top" src="/uploads/<%= dataElement.name %>" alt="Card image cap">
+                            <div class="card-body">
+                                <p class="card-text"><%= dataElement.descrip %></p>
+                            </div>
                         </div>
+                        <%  }); %>
                     </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://previews.123rf.com/images/ba11istic/ba11istic1511/ba11istic151100005/47961698-hermosos-paisajes-de-oto%C3%B1o-y-el-cielo-en-noviembre.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                </div>   
+        <%  }); %> 
+
+        <div class="col-12 mt-5 justify-content-around">  
+            
+            <style>
+                .btn-circle {
+                    width: 100px;
+                    height: 100px; 
+                    border-radius: 70px;
+                    font-size: 24px;
+                    line-height: 1.33;
+                    bottom: 10px;
+                    right: 50px;
+                    position: fixed;
+                }
+            </style>
+            <div class="col-12 mt-2 mb-4 d-flex justify-content-center">
+                <button type = "button" class = "btn btn-lg btn-warning disabled">Opciones Avanzadas</button>
+            </div>  
+            <button type="button" class="btn btn-info btn-circle btn-xl" data-toggle="modal"  data-target="#exampleModal"><i class="fas fa-plus fa-3x"></i>
+            </button> 
+              
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Subir Foto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         </div>
+                        <div class="modal-body">
+                            <%- include("../components/uploadFoto") %>
+                        </div>
+                        
                     </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.medicinatv.com/wp-content/uploads/2017/02/PROPIEDADESDELASFRESAS-SINROT.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
-                    </div>  
-                </div>
-            </div> 
-            <div class="col-12 mt-2">
-                <div class="col-12">
-                    <div class="h4">Usuario 2</div>
-                </div>
-                <div class="row" style="justify-content: space-evenly;/* width: 90%; */">
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://image.freepik.com/foto-gratis/jugador-futbol-rojo-pateando-pelota-estadio_43569-216.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://ubunlog.com/wp-content/uploads/2016/08/Fondo-Sylvia-Ritter.png" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://depor.com/resizer/kepajQLZgSVdzC2QjHKJmTHAdVw=/980x528/smart/arc-anglerfish-arc2-prod-elcomercio.s3.amazonaws.com/public/CHECRZDQT5HKZGTCLXEX44OPHI.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://locuraviajes.com/wp-content/uploads/2017/06/mejores-paisajes-mundo-bora-bora-pixabay-600x400.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        </div>
-                    </div>  
-                </div>
-            </div> 
-            <div class="col-12 mt-2 bg-light pb-2">
-                <div class="col-12">
-                    <div class="h4">Usuario 3</div>
-                </div>
-                <div class="row" style="justify-content: space-evenly;/* width: 90%; */">
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.aecid.es/Centro-Documentacion/PublishingImages/Estructura%20Web/Minisite%20FCAS/agua%20Fondo%20Plus.png" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.blogdelfotografo.com/wp-content/uploads/2019/03/faro-noche.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.androidsis.com/wp-content/uploads/2018/02/Redmi-Note-5-Styled-Wallpapers-33.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                        </div>
-                    </div>
-                    <div class="card mt-1" style="width: 18rem;">
-                        <img class="card-img-top" src="https://drescuela.com/wp-content/uploads/2018/07/portada-develkova.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                        </div>
-                    </div>  
                 </div>
             </div>
-            <div class="col-12 mt-2 mb-4 d-flex justify-content-center">
-                <button type = "button" class = "btn btn-lg btn-warning">Opciones Avanzadas</button>
-            </div>  
         </div>
         
-    </div>		
+    </div>	
+    
+  
+
 </div>

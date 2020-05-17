@@ -36,7 +36,8 @@ CREATE TABLE `photos` (
   `NAME` varchar(150) NOT NULL,
   `FORMAT` varchar(20) NOT NULL,
   `DATE_CREATION` date NOT NULL,
-  `ID_USER` int(11) NOT NULL
+  `ID_USER` int(11) NOT NULL,
+  `DESCRIP` varchar(2500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
