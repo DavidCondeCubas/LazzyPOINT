@@ -361,7 +361,7 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
                         dataCleaned[element.nick].push(dataInner) 
                     }); 
                     res.status(200);
-                    res.render("galeriaImagenes",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
+                    res.render("galeria",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
                     res.end(); 
                 }
                 else
