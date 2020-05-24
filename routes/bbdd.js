@@ -31,8 +31,8 @@ const pool = mysql.createPool({
     {  
        pool.getConnection((err, connection) => {
              if (err) { callback(err); return; }
-             connection.query("SELECT * FROM users WHERE (email = ? or nick = ?) and password = ?",
-             [datos.nick,datos.nick,datos.pwd],
+             connection.query("SELECT * FROM users WHERE (email=$1 or nick=$2) and password =$3",
+             [datos.nickl,datos.nickl,datos.pwdl],
              (err, rows) => {
                  if (err) { callback(err); return; }
                  connection.release();

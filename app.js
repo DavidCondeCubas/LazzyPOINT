@@ -18,6 +18,8 @@ let multerFactory = multer({ dest: path.join(__dirname,"/public/uploads") });
 
 //VARIABLE BBDD
 var bd = require("./routes/bbdd.js");
+var pg = require('./routes/postgres.js');
+
 var bodyParser = require("body-parser");
 
 app.set("view engine", "ejs");
@@ -30,15 +32,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
 
-const session = require("express-session");
-const mysqlSession = require("express-mysql-session");
-const MySQLStore = mysqlSession(session);
-const sessionStore = new MySQLStore({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "lazzypoint"
-});
+//const session = require("express-session");
+// const mysqlSession = require("express-mysql-session");
+// const MySQLStore = mysqlSession(session);
+// const sessionStore = new MySQLStore({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "lazzypoint"
+// });
 // const sessionStore = new MySQLStore({
 //     host: "sql7.freemysqlhosting.net",
 //     user: "sql7336353",
@@ -46,30 +48,97 @@ const sessionStore = new MySQLStore({
 //     database: "sql7336353"
 // });
 
-const middlewareSession = session({
-    saveUninitialized: false,
-    secret: "foobar34",
-    resave: false,
-    store: sessionStore
+//const session = require("express-session");
+//const pgSession = require("connect-pg-simple");
+// const PostgresStore = pgSession(session);
+// const sessionDBaccess = new PostgresStore({
+//     host: 'ec2-54-247-169-129.eu-west-1.compute.amazonaws.com',
+//     user: 'ihnahmzsswoqjn',
+//     database: 'deu6ptr3gt32eh',
+//     password: '9347ced241f579418d7dcff960d3747614f80ba9167c2fce97e251e05de67563',
+//     port: 5432,
+//     ssl: {
+//         rejectUnauthorized: false
+//     },
+//     dialect: 'postgres',
+//     operatorAliases: false
+// });
+
+
+// const session = require('express-session');
+// const SequelizeStore = require('connect-session-sequelize')(session.Store);
+// const sequelize = require('./utils/sequelize-singleton.js');
+
+// require('./models/session.js');
+
+// app.use(session({
+//     secret: "foobar34",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       maxAge: 30 * 24 * 60 * 60 * 1000, // 1 month
+//     },
+//     store: new SequelizeStore({
+//       db: sequelize,
+//       table: 'sessions',
+//    })
+// }));
+
+// const middlewareSession = session({
+//     saveUninitialized: false,
+//     secret: "foobar34",
+//     resave: false,
+//     store: sessionDBaccess,
+//     cookie: {
+//         maxAge:30*24*60*60*1000
+//     } // 30 days
+// });
+// app.use(middlewareSession);
+
+
+
+const pgsql = require('pg');
+const session = require('express-session');
+const pgSession = require('express-pg-session')(session);
+ 
+var pgPool = new pgsql.Pool({
+    host: 'ec2-54-247-169-129.eu-west-1.compute.amazonaws.com',
+    user: 'ihnahmzsswoqjn',
+    database: 'deu6ptr3gt32eh',
+    password: '9347ced241f579418d7dcff960d3747614f80ba9167c2fce97e251e05de67563',
+    port: 5432,
+    ssl: {
+        rejectUnauthorized: false
+    },
+    dialect: 'postgres',
+    operatorAliases: false
 });
-app.use(middlewareSession);
+ 
+app.use(session({
+  store: new pgSession({
+    pool : pgPool,                // Connection pool
+    tableName : 'user_sessions'   // Use another table-name than the default "session" one
+  }),
+  secret: "foobar34",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 1 month
+}));
+
+
 
 app.get("/logout",function(req,res){
     req.session.usuario = undefined;
     res.redirect("/");
   })
 app.get("/", function(req, res) {   
-   // res.render("index");
     if(req.session.usuario === undefined ){ 
         res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: ''});
     }
     else{
-        let usuario = { 
-            usuario:  req.session.usuario.usuario
-        }
-        res.render("homepage", {origen:"logeado", datos: usuario});
+        res.render("homepage", {origen:"logeado", datos: req.session.usuario});
     }
-    res.end(); 
+    res.end();
 });
 
 app.get("/menu", function(req, res) {
@@ -79,138 +148,168 @@ app.get("/menu", function(req, res) {
 app.post("/registro", function(req, res) {
 
     var nuevoUsuario = { 
-        nick: req.body.nick,
+        nick: req.body.nickr,
         email: req.body.email,
-        password: req.body.pwd,
+        password: req.body.pwdr,
         rol: req.body.rol
     }
-
-    bd.existNick(nuevoUsuario, function(err, results) {
+    pg.existNick(nuevoUsuario, function(err, results) {
         if (err !== null) {
-            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte técnico."});
         }
-        if (results !== false) {
-            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El nick ya existe en el sistema"});
+        if (results.rowCount > 0) {
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El nick ya existe en el sistema."});
         }
         else{
-            bd.existEmail(nuevoUsuario, function(err, results) {
+            pg.existEmail(nuevoUsuario, function(err, results) {
                 if (err !== null) {
-                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte técnico."});
                 }
-                if (results !== false) {
-                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El email ya existe en el sistema"});
+                if (results.rowCount > 0) {
+                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "El email ya existe en el sistema."});
                 }
                 else{
-                    bd.insertarUsuario(nuevoUsuario, function(err, results) {
+                    pg.insertarUsuario(nuevoUsuario, function(err, results) {
                         if (err !== null) {
-                            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte tecnico."});
+                            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte técnico."});
                         }
-                        if (results !== false) {
+                        if (results > 0) {
                             res.status(200);
                             var datosBD = []; 
                             let usuario = { 
                                 usuario: nuevoUsuario.nick
-                            }
-                            req.session.usuario= usuario;
+                            };
+                            req.session.usuario = {
+                                nick: nuevoUsuario.nick,
+                                id: results.rows[0].id
+                            };
                             req.session.datosBD= datosBD;
                             res.render("homepage",{origen:"logeado", datos: usuario});
                             res.end();
                         }
-                        else{
+                        else {
+                            console.error("Datos devueltos =>",results);
                             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Hubo problemas al insertar en base datos"});
                         }
                     })
                 }
-            });  
+            });
         }
-    }); 
-
+    });
 });
 
 app.post("/menu", function(req, res) {
-    var usuario ={usuario: req.body.nick}
-    // res.render("homepage");
-    
-    bd.isUserCorrect(req.body, function(err, results) {
-        if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
-            //res.render("error", { message: "Problema BBDD",error: err });        
-        if (results !== false) {
+
+    pg.isUserCorrect(req.body, function(err, results) {
+        if (err !== null) {
+            res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"}); 
+        }
+        if (results.rowCount > 0) {
             res.status(200);
-            var datosBD = JSON.parse(JSON.stringify(results)); 
-            let usuario = { 
-                id: results[0].ID,
-                usuario:  results[0].NICK
+            const usuario = { 
+                id: results.rows[0].id,
+                nick:  results.rows[0].nick
             }
             req.session.usuario= usuario;
-            req.session.datosBD= datosBD;
+            req.session.datosBD= results;
             res.render("homepage",{origen:"logeado", datos: usuario});
             res.end(); 
         }
         else
             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
-        });
+    });
+});
+
+app.get("/modifyProfile", function(req, res) { //solo test
+    var usuario = req.session.usuario;
+    pg.getUserData(usuario, function(err, results) {
+        if (err !== null) {
+            res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});
+        }   
+        if (results !== false) {
+            res.status(200);
+            res.render("modifyprofile",{datos: results.rows[0],error: "",respuesta: ""});
+            res.end(); 
+        }
+        else
+            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
+    });
 });
 
 app.post("/modifyUser", function(req, res) {   
-    var datosBD= { 
-        EMAIL:req.body.email,
-        NAME:req.body.rol,
-        NICK: req.body.nick,
-        PASSWORD:req.body.pwd, 
-    }; 
-    bd.checkUser(req.body, function(err, results) {
-        if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
-            //res.render("error", { message: "Problema BBDD",error: err });        
-        if (results == false || req.session.usuario.usuario == req.body.nick) { // no existe usuario con este correo o nick 
+    var nuevosDatosUsuario= { 
+        email:req.body.email,
+        nick: req.body.nick,
+        password:req.body.pwd,
+        name:req.body.name_rol,
+        id: req.session.usuario.id
+    };
+    pg.checkUser(nuevosDatosUsuario, function(err, results) {
+        if (err !== null) {
+            res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});
+        }
+        if (results.rowCount === 0) { // no existe usuario con este correo o nick 
             var data={
-                username: req.session.usuario.usuario,
+                username: req.session.usuario.nick,
                 email: req.body.email,
                 nick: req.body.nick,
                 pwd: req.body.pwd
             }
-            bd.updateUser(data, function(err, results) {
-                if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
-                    //res.render("error", { message: "Problema BBDD",error: err });        
+            pg.updateUser(data, function(err, results) {
+                if (err !== null) {
+                    res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});         
+                }
                 if (results !== false) {
                     res.status(200);  
-                    let usuario = { 
-                        usuario: data.nick,
+                    req.session.usuario= { 
+                        nick: req.body.nick,
                         id: req.session.usuario.id
-                    }
-                    req.session.usuario= usuario; 
-                    datosBD.nick = data.nick;
-                    
-                    res.render("modifyprofile",{datos: datosBD,error: "",respuesta: "Datos actualizados correctamente."});
+                    };
+                    res.render("modifyprofile",{datos: nuevosDatosUsuario,error: "",respuesta: "Datos actualizados correctamente."});
                     res.end(); 
                 }
                 else
-                    res.render("modifyprofile",{datos: datosBD,error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
+                    res.render("modifyprofile",{datos: nuevosDatosUsuario, error: "Problemas con la inserción contacte con el soporte.",respuesta: ""});
                 }); 
         }
-        else // existe usuario con email o correo igual 
-            res.render("modifyprofile",{datos: datosBD,error: "Este nick ya esta en uso.",respuesta: ""});
-        });
+        else {// existe usuario con email o correo igual
+            const usuario = {
+                id: req.session.usuario.id,
+                nick: req.session.usuario.nick
+            }
+            pg.getUserData(usuario, function(err, results) {
+                if (err !== null) {
+                    res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});
+                }   
+                if (results !== false) {
+                    res.status(200);
+                    res.render("modifyprofile",{datos: results.rows[0],error: "Este nick o email ya está en uso.",respuesta: ""});
+                    res.end(); 
+                }
+                else
+                    res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
+            });
+        }
+    });
 });
-
 
 app.get("/presentaciones", function(req, res) { //solo test
     res.render("presentation");
 });
 
 app.get("/galeriaImagenes", function(req, res) {  
-    bd.getAllDataPhoto({}, function(err, results) {
-        if (err !== null) res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});   
-            //res.render("error", { message: "Problema BBDD",error: err });        
-        if (results !== false) { 
-            var datosBD = JSON.parse(JSON.stringify(results));  
+    pg.getAllDataPhoto({}, function(err, results) {
+        if (err !== null) {
+            res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});
+        }
+        if (results !== false) {   
             var dataCleaned = {};
             var dataUsers =[];
-
-            datosBD.forEach(element => {
+            results.rows.forEach(element => {
                 if(dataCleaned[element.nick] == undefined){ 
                     dataCleaned[element.nick] = [];
                     dataUsers.push(element.nick);
-                } 
+                }
                 var dataInner ={
                     name: element.NAME,
                     descrip: element.DESCRIP,
@@ -219,43 +318,15 @@ app.get("/galeriaImagenes", function(req, res) {
                     id: element.ID
                 } 
                 dataCleaned[element.nick].push(dataInner) 
-            }); 
-   
+            });
             res.status(200);
             let fotos = req.session.datosBD; 
             res.render("galeria",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
-//                   res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
-            
-            //res.render("modifyProfile"); 
             res.end(); 
         }
         else
         res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});    
     }); 
-});
-
-app.get("/contacto", function(req, res) { //solo test
-    res.render("contacto");
-});
-
-app.get("/modifyProfile", function(req, res) { //solo test
-    var usuario = req.session.usuario;
-    // res.render("homepage"); 
-    bd.getUserData(usuario, function(err, results) {
-        if (err !== null) res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
-            //res.render("error", { message: "Problema BBDD",error: err });        
-        if (results !== false) {
-            res.status(200);
-            var datosBD = JSON.parse(JSON.stringify(results));  
-            
-            res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
-            
-            //res.render("modifyProfile"); 
-            res.end(); 
-        }
-        else
-            res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
-        });
 });
 
 app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
@@ -265,18 +336,17 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
         ext: req.file.mimetype,
         fotoUsuarios: req.file.filename
     } 
-    bd.insertarFoto(usuario, function(err, results) {
-        if (err !== null) res.render("components/error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
-        if (results !== false) { 
-            bd.getAllDataPhoto({}, function(err, results) {
-                if (err !== null) res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});   
-                    //res.render("error", { message: "Problema BBDD",error: err });        
-                if (results !== false) { 
-                    var datosBD = JSON.parse(JSON.stringify(results));  
+    pg.insertarFoto(usuario, function(err, results) {
+        if (err !== null) {
+            res.render("components/error", {mensaje: "error conexión",error: "Intentalo nuevamente"});  
+        }
+        if (results !== false) {
+            pg.getAllDataPhoto({}, function(err, results) {
+                if (err !== null) res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});
+                if (results !== false) {   
                     var dataCleaned = {};
                     var dataUsers =[];
-        
-                    datosBD.forEach(element => {
+                    results.rows.forEach(element => {
                         if(dataCleaned[element.nick] == undefined){ 
                             dataCleaned[element.nick] = [];
                             dataUsers.push(element.nick);
@@ -290,13 +360,8 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
                         } 
                         dataCleaned[element.nick].push(dataInner) 
                     }); 
-           
                     res.status(200);
-                    let fotos = req.session.datosBD; 
-                    res.render("galeria",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
-        //                   res.render("modifyprofile",{datos: datosBD[0],error: "",respuesta: ""});
-                    
-                    //res.render("modifyProfile"); 
+                    res.render("galeriaImagenes",{dataPhoto: dataCleaned, dataUsernames: dataUsers}); 
                     res.end(); 
                 }
                 else
@@ -307,7 +372,10 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
             res.render("components/error", {mensaje: "Error al insertar foto",error: "Intentalo nuevamente"});  
         }
     });
-    
+});
+
+app.get("/contacto", function(req, res) { //solo test
+    res.render("contacto");
 });
 
 const port = process.env.PORT || 3000;

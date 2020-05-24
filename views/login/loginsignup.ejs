@@ -5,8 +5,8 @@
             <h2 class="text-center">Registrarse</h2>
             <form action="/registro" method="post">
                 <div class="form-group">
-                    <label for="nick">Nick</label>
-                    <input name="nick" type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick">
+                    <label for="nickr">Nick</label>
+                    <input name="nickr" type="text" class="form-control" id="nickr" aria-describedby="nickHelp" placeholder="Nick">
                     <small id="nickHelp" class="form-text text-muted">Introduce tu usuario</small>
                 </div>
                 <div class="form-group">
@@ -15,8 +15,8 @@
                     <small id="emailHelp" class="form-text text-muted">Introduce tu email</small>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Contraseña</label>
-                    <input name="pwd" type="password" class="form-control" id="pwd" placeholder="Contraseña">
+                    <label for="pwdr">Contraseña</label>
+                    <input name="pwdr" type="password" class="form-control" id="pwdr" placeholder="Contraseña">
                 </div>
                 <div class="form-group">
                     <label for="rol">Rol</label>
@@ -36,18 +36,16 @@
             <h2 class="text-center">Login</h2>
             <form action="/menu" method="post">
                 <div class="form-group">
-                    <label for="nick">Nick o email</label>
-                    <input name="nick"  type="text" class="form-control" id="nick" aria-describedby="nickHelp" placeholder="Nick o email">
-                    <small id="nickHelp" class="form-text text-muted">Introduce tu contraseña o email</small>
+                    <label for="nickl">Nick o email</label>
+                    <input name="nickl"  type="text" class="form-control" id="nickl" aria-describedby="nickHelp" placeholder="Introduce tu contraseña o email">
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Contraseña</label>
-                    <input name="pwd" type="password" class="form-control" id="pwd" placeholder="Contraseña">
+                    <label for="pwdl">Contraseña</label>
+                    <input name="pwdl" type="password" class="form-control" id="pwdl" placeholder="Intorduc tu constraseña">
                 </div>
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-lg btn-primary">Acceder</button>
                 </div>
-
                 <p class="h3 text-danger"><%= error %></p>
             </form>
         </div>
