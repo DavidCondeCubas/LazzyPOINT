@@ -311,11 +311,11 @@ app.get("/galeriaImagenes", function(req, res) {
                     dataUsers.push(element.nick);
                 }
                 var dataInner ={
-                    name: element.NAME,
-                    descrip: element.DESCRIP,
-                    date: element.DATE_CREATION,
+                    name: element.name,
+                    descrip: element.descrip,
+                    date: element.date_creation,
                     nick: element.nick,
-                    id: element.ID
+                    id: element.id
                 } 
                 dataCleaned[element.nick].push(dataInner) 
             });
@@ -352,11 +352,11 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
                             dataUsers.push(element.nick);
                         } 
                         var dataInner ={
-                            name: element.NAME,
-                            descrip: element.DESCRIP,
-                            date: element.DATE_CREATION,
+                            name: element.name,
+                            descrip: element.descrip,
+                            date: element.date_creation,
                             nick: element.nick,
-                            id: element.ID
+                            id: element.id
                         } 
                         dataCleaned[element.nick].push(dataInner) 
                     }); 
