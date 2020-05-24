@@ -321,7 +321,7 @@ exports.insertarFoto= function(datos, callback)
 {
     pool.connect((err, connection) => {
         if (err) { callback(err); return; }
-        connection.query("INSERT INTO photos (NAME,FORMAT,DATE_CREATION,ID_USER,DESCRIP) VALUES ($1,$2,now(),$3,$4)",
+        connection.query("INSERT INTO photos (name,format,date_creation,id_user,descrip) VALUES ($1,$2,now(),$3,$4)",
         [datos.fotoUsuarios,datos.ext,datos.userID,datos.descripcion],
         (err, rows) => {
             connection.release();
