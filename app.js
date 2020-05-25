@@ -235,6 +235,22 @@ app.get("/modifyProfile", function(req, res) { //solo test
             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
     });
 });
+app.post("/bajaUser",function(req,res){
+    var datosBaja ={ 
+        id_user: req.session.usuario.id,
+        id_type: 3
+    }
+    pg.sendBajaUsuario(datosBaja,function(err,results){
+        if(err !==null){
+            res.render("error",{mensaje:"error conexión",error:"Intentando nuevamente"});
+        }
+        else{
+
+            res.render("modifyProfile",{datos:req.session.usuario,error: "",respuesta:"Petición Enviada Correctamente"});
+            res.end();
+        }
+    })
+});
 
 app.post("/modifyUser", function(req, res) {   
     var nuevosDatosUsuario= { 
