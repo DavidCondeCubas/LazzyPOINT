@@ -173,7 +173,7 @@ app.post("/registro", function(req, res) {
                         if (err !== null) {
                             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte técnico."});
                         }
-                        if (results > 0) {
+                        if (results.rowCount > 0) {
                             res.status(200);
                             var datosBD = []; 
                             let usuario = { 
