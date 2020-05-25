@@ -74,6 +74,7 @@ exports.updateUser = function(datos, callback)
      });
 };
 
+
 exports.getUserData = function(datos, callback)
 {  
    pool.connect((err, connection) => {
@@ -204,6 +205,26 @@ exports.existNickOrEmail = function(datos, callback)
          });
      });
 };
+
+
+exports.sendBajaUsuario = function(datos,callback){
+    pool.connect((err,connection)=>{
+        if(err){
+            callback(err);return;
+        }
+        connection.query("insert into moderator_request (id_user,id_type) values ($1,$2) returning id",
+        [datos.id_user,datos.id_type],(err,result)=>{
+            connection.release();
+            if(err){
+                callback(null,-1);
+            }
+            else {
+                console.log(result);
+                callback(null,result);
+            }
+        });
+    })
+}
 
 exports.insertarUsuario = function(datos, callback)
 {  

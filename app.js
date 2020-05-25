@@ -107,7 +107,7 @@ app.post("/registro", function(req, res) {
                         if (err !== null) {
                             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[], error: "Problemas con la conexion, contacte con el soporte técnico."});
                         }
-                        if (results > 0) {
+                        if (results.rowCount > 0) {
                             res.status(200);
                             var datosBD = []; 
                             let usuario = { 
@@ -168,6 +168,22 @@ app.get("/modifyProfile", function(req, res) { //solo test
         else
             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
     });
+});
+app.post("/bajaUser",function(req,res){
+    var datosBaja ={ 
+        id_user: req.session.usuario.id,
+        id_type: 3
+    }
+    pg.sendBajaUsuario(datosBaja,function(err,results){
+        if(err !==null){
+            res.render("error",{mensaje:"error conexión",error:"Intentando nuevamente"});
+        }
+        else{
+
+            res.render("modifyProfile",{datos:req.session.usuario,error: "",respuesta:"Petición Enviada Correctamente"});
+            res.end();
+        }
+    })
 });
 
 app.post("/modifyUser", function(req, res) {   
