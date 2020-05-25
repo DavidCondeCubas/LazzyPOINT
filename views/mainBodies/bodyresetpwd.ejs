@@ -1,0 +1,44 @@
+<%- include("../includes/header") %>
+<div class="body-loginsignup">
+    <div class="justify-content-center align-items-center">
+        <div class="col-sm-6 ml-auto mr-auto mt-3 mb-3">
+            <div class="form-group">
+                <label for="nick">Nick o Email</label>
+                <input name="reset" type="text" class="form-control" id="reset" aria-describedby="nickHelp" placeholder="Introduce tu nick o email" autofocus />
+            </div>
+            <% if(respuesta > 0) { %>
+                <div class="alert alert-<% if (respuesta === 2) { %>danger<% } else { %>success<% } %> alert-dismissible fade show" role="alert">
+                    <strong><%= error %></strong><%= mensaje %>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <% } %>
+            <div class="form-group text-center">
+                <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal1">Solicitar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">¿Estas seguro que deseas resetear la contraseña?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Si tus datos son correctos se te enviará un correo cuando el moderador haya aprobado la solicitud.</p>
+        </div>
+        <div class="modal-footer">
+            <form action="/sendresetpwd" method="POST">
+                <input type="hidden" name="send" id="send" />
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+            </form>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>

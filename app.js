@@ -25,77 +25,11 @@ var bodyParser = require("body-parser");
 app.set("view engine", "ejs");
 app.set ("views", path.join( __dirname , "views"));  //Creamos subcarpeta justo debajo de donde el archivo actual
 
-const ficherosEstaticos = path.join(__dirname,"public");
-app.use(express.static(ficherosEstaticos));
+app.use(express.static('./public'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
-
-//const session = require("express-session");
-// const mysqlSession = require("express-mysql-session");
-// const MySQLStore = mysqlSession(session);
-// const sessionStore = new MySQLStore({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "lazzypoint"
-// });
-// const sessionStore = new MySQLStore({
-//     host: "sql7.freemysqlhosting.net",
-//     user: "sql7336353",
-//     password: "RRA7LkAdcf",
-//     database: "sql7336353"
-// });
-
-//const session = require("express-session");
-//const pgSession = require("connect-pg-simple");
-// const PostgresStore = pgSession(session);
-// const sessionDBaccess = new PostgresStore({
-//     host: 'ec2-54-247-169-129.eu-west-1.compute.amazonaws.com',
-//     user: 'ihnahmzsswoqjn',
-//     database: 'deu6ptr3gt32eh',
-//     password: '9347ced241f579418d7dcff960d3747614f80ba9167c2fce97e251e05de67563',
-//     port: 5432,
-//     ssl: {
-//         rejectUnauthorized: false
-//     },
-//     dialect: 'postgres',
-//     operatorAliases: false
-// });
-
-
-// const session = require('express-session');
-// const SequelizeStore = require('connect-session-sequelize')(session.Store);
-// const sequelize = require('./utils/sequelize-singleton.js');
-
-// require('./models/session.js');
-
-// app.use(session({
-//     secret: "foobar34",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       maxAge: 30 * 24 * 60 * 60 * 1000, // 1 month
-//     },
-//     store: new SequelizeStore({
-//       db: sequelize,
-//       table: 'sessions',
-//    })
-// }));
-
-// const middlewareSession = session({
-//     saveUninitialized: false,
-//     secret: "foobar34",
-//     resave: false,
-//     store: sessionDBaccess,
-//     cookie: {
-//         maxAge:30*24*60*60*1000
-//     } // 30 days
-// });
-// app.use(middlewareSession);
-
-
 
 const pgsql = require('pg');
 const session = require('express-session');
@@ -374,9 +308,31 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
     });
 });
 
-app.get("/contacto", function(req, res) { //solo test
-    res.render("contacto");
+app.get("/resetpwd", function(req, res) {
+    res.render("resetpwd", {error:"", mensaje:"", respuesta: 0});
 });
+
+app.post("/sendresetpwd", function(req, res) {
+    var nickOrEmail = req.body.send;
+    pg.existNickOrEmail(nickOrEmail, function(err, results) {
+        if (err !== null) {
+            res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente",respuesta:2});
+        }
+        if (results !== false) {
+            if (results.rowCount > 0) {
+                pg.sendRequestResetPwd(results.rows[0], function(err, results) {
+                    if (err !== null) {
+                        res.render("error", {mensaje: "Error conexión",error: "Intentalo nuevamente", respuesta:2});
+                    }
+                });
+            }
+            res.status(200);
+            res.render("resetpwd", {mensaje: "Cuando el moderador lo apruebe recibirás un correo con el enlace para cambiar la contraseña.",error: "Enviado correctamente! ",respuesta: 1});
+            res.end(); 
+        }
+    });
+});
+
 
 const port = process.env.PORT || 3000;
 

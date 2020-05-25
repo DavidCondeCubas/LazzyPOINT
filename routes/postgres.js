@@ -184,25 +184,26 @@ exports.existEmail = function(datos, callback)
     });
 };
 
-// exports.insertarUsuario = function(datos, callback)
-// {  
-//    pool.connect((err, connection) => {
-//         if (err) 
-//         { 
-//             callback(err); return; 
-//         }      
-//         connection.query("insert into users (nick, email, password, state, id_rol) values ($1, $2, $3, 1, $4)",
-//             [datos.nick, datos.email, datos.password, datos.rol],
-//             (err, result) => {
-//             connection.release();
-//             if (err) {
-//                 callback(null, false);
-//             } else {
-//                 callback(null, true);
-//             }
-//          });
-//      });
-// };
+exports.existNickOrEmail = function(datos, callback)
+{  
+   pool.connect((err, connection) => {
+         if (err) { callback(err); return; }
+         connection.query(`select * from users where (nick=$1 or email=$1)`,
+         [datos],
+         (err, rows) => {
+            if (err) { 
+                callback(err); 
+                return; 
+            }
+            connection.release();
+            if (rows.length === 0) {
+                callback(null, false);
+            } else {
+                callback(null, rows);
+            }
+         });
+     });
+};
 
 exports.insertarUsuario = function(datos, callback)
 {  
@@ -225,7 +226,27 @@ exports.insertarUsuario = function(datos, callback)
      });
 };
 
-
+exports.sendRequestResetPwd = function(datos, callback)
+{  
+   pool.connect((err, connection) => {
+        if (err) 
+        { 
+            callback(err); return; 
+        }
+        connection.query("insert into moderator_request (date_creation, id_user, id_type) values (now(), $1, 1)",
+            [datos.id],
+            (err, result) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                callback(null, err);
+            } else {
+                console.log(result);
+                callback(null, result);
+            }
+         });
+     });
+};
 
 exports.updateUsuario = function(datos, callback)
 {  
@@ -300,6 +321,7 @@ exports.aceptarAmigo = function(email1,email2, callback)
         });
     });
 };
+
 exports.insertarAmigo= function(email1,email2, callback)
 {
     pool.connect((err, connection) => {
@@ -317,6 +339,7 @@ exports.insertarAmigo= function(email1,email2, callback)
         });
     });
 };
+
 exports.insertarFoto= function(datos, callback)
 {
     pool.connect((err, connection) => {
@@ -333,6 +356,7 @@ exports.insertarFoto= function(datos, callback)
         });
     });
 };
+
 exports.rechazarAmigo = function(email1,email2, callback)
 {
     pool.connect((err, connection) => {

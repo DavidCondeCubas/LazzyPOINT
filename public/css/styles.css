@@ -263,3 +263,12 @@ header > hr {
 .card-img-top{
     height: 140px;
 }
+
+
+.body-loginsignup a {
+    color: #990073;
+}
+
+.body-loginsignup a:hover {
+    text-decoration: none;
+}
