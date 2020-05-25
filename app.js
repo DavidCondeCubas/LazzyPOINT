@@ -324,6 +324,10 @@ app.post("/Form_upload",multerFactory.single("file"), (req, res) => {
     });
 });
 
+app.get("/contacto", function(req, res) {
+    res.render("contacto");
+})
+
 app.get("/resetpwd", function(req, res) {
     res.render("resetpwd", {error:"", mensaje:"", respuesta: 0});
 });
