@@ -60,11 +60,11 @@ app.use(session({
 }));
 
 
-
 app.get("/logout",function(req,res){
     req.session.usuario = undefined;
     res.redirect("/");
-  })
+});
+
 app.get("/", function(req, res) {   
     if(req.session.usuario === undefined ){ 
         res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: ''});
@@ -111,7 +111,7 @@ app.post("/registro", function(req, res) {
                             res.status(200);
                             var datosBD = []; 
                             let usuario = { 
-                                usuario: nuevoUsuario.nick
+                                nick: nuevoUsuario.nick
                             };
                             req.session.usuario = {
                                 nick: nuevoUsuario.nick,
@@ -169,19 +169,35 @@ app.get("/modifyProfile", function(req, res) { //solo test
             res.render("index", {origen:"noLogeado", datos: "usuDesc",datosBD:[],error: "Intentalo nuevamente, credenciales no encontradas."});  
     });
 });
+
 app.post("/bajaUser",function(req,res){
-    var datosBaja ={ 
+    var datosBaja = { 
         id_user: req.session.usuario.id,
         id_type: 3
-    }
+    };
     pg.sendBajaUsuario(datosBaja,function(err,results){
-        if(err !==null){
+        if (err !== null) {
             res.render("error",{mensaje:"error conexión",error:"Intentando nuevamente"});
         }
-        else{
-
-            res.render("modifyProfile",{datos:req.session.usuario,error: "",respuesta:"Petición Enviada Correctamente"});
-            res.end();
+        else {
+            var usuario = {
+                id: datosBaja.id_user
+            };
+            pg.getUserById(usuario, function(err, results) {
+                if (err !== null) {
+                    res.render("error", {mensaje: "error conexión",error: "Intentalo nuevamente"});
+                }   
+                if (results !== false) {
+                    res.status(200);
+                    res.render("modifyprofile",{datos: results.rows[0], error: "",respuesta: "¡Peticion enviada correctamente!"});
+                    res.end(); 
+                }
+                else {
+                    res.status(200);
+                    res.render("modifyprofile",{datos: results.rows[0], error: "",respuesta: "¡Peticion ya fue enviada!"});
+                    res.end(); 
+                }
+            });
         }
     })
 });

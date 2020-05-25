@@ -93,6 +93,24 @@ exports.getUserData = function(datos, callback)
      });
 };
 
+exports.getUserById = function(datos, callback)
+{  
+   pool.connect((err, connection) => {
+         if (err) { callback(err); return; }
+         connection.query("select u.id, u.nick, u.email, u.password, u.id_rol, r.name from users u, roles r where u.id_rol=r.id and u.id=$1",
+         [datos.id],
+         (err, rows) => {
+             if (err) { callback(err); return; }
+             connection.release();
+             if (rows.length === 0) {
+                 callback(null, false);
+             } else {
+                 callback(null, rows);
+             }
+         });
+     });
+};
+
 exports.getAllDataPhoto = function(datos, callback)
 {  
    pool.connect((err, connection) => {
@@ -207,19 +225,19 @@ exports.existNickOrEmail = function(datos, callback)
 };
 
 
-exports.sendBajaUsuario = function(datos,callback){
-    pool.connect((err,connection)=>{
+exports.sendBajaUsuario = function(datos,callback)
+{
+    pool.connect((err,connection) => {
         if(err){
             callback(err);return;
         }
-        connection.query("insert into moderator_request (id_user,id_type) values ($1,$2) returning id",
-        [datos.id_user,datos.id_type],(err,result)=>{
+        connection.query("insert into moderator_request (date_creation, id_user, id_type) values(now(), $1, $2) returning id",
+        [datos.id_user,datos.id_type], (err, result) => {
             connection.release();
             if(err){
                 callback(null,-1);
             }
             else {
-                console.log(result);
                 callback(null,result);
             }
         });
